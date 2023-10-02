@@ -15,16 +15,20 @@ abstract class _$AppRouter extends RootStackRouter {
 
   @override
   final Map<String, PageFactory> pagesMap = {
+    AchievementRoute.name: (routeData) {
+      final args = routeData.argsAs<AchievementRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: AchievementScreen(
+          key: args.key,
+          achievement: args.achievement,
+        ),
+      );
+    },
     AchivementsRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const AchivementsPage(),
-      );
-    },
-    AllAchivementsRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const AllAchivementsTab(),
       );
     },
     InitialRoute.name: (routeData) {
@@ -63,13 +67,45 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const StepsCounterPage(),
       );
     },
-    UserAchivementsRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const UserAchivementsTab(),
-      );
-    },
   };
+}
+
+/// generated route for
+/// [AchievementScreen]
+class AchievementRoute extends PageRouteInfo<AchievementRouteArgs> {
+  AchievementRoute({
+    Key? key,
+    required Achievement achievement,
+    List<PageRouteInfo>? children,
+  }) : super(
+          AchievementRoute.name,
+          args: AchievementRouteArgs(
+            key: key,
+            achievement: achievement,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'AchievementRoute';
+
+  static const PageInfo<AchievementRouteArgs> page =
+      PageInfo<AchievementRouteArgs>(name);
+}
+
+class AchievementRouteArgs {
+  const AchievementRouteArgs({
+    this.key,
+    required this.achievement,
+  });
+
+  final Key? key;
+
+  final Achievement achievement;
+
+  @override
+  String toString() {
+    return 'AchievementRouteArgs{key: $key, achievement: $achievement}';
+  }
 }
 
 /// generated route for
@@ -82,20 +118,6 @@ class AchivementsRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'AchivementsRoute';
-
-  static const PageInfo<void> page = PageInfo<void>(name);
-}
-
-/// generated route for
-/// [AllAchivementsTab]
-class AllAchivementsRoute extends PageRouteInfo<void> {
-  const AllAchivementsRoute({List<PageRouteInfo>? children})
-      : super(
-          AllAchivementsRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'AllAchivementsRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }
@@ -180,20 +202,6 @@ class StepsCounterRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'StepsCounterRoute';
-
-  static const PageInfo<void> page = PageInfo<void>(name);
-}
-
-/// generated route for
-/// [UserAchivementsTab]
-class UserAchivementsRoute extends PageRouteInfo<void> {
-  const UserAchivementsRoute({List<PageRouteInfo>? children})
-      : super(
-          UserAchivementsRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'UserAchivementsRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

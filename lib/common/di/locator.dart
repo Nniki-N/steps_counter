@@ -3,9 +3,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
+import 'package:steps_counter/data/datasources/firebase_achivements_datasource.dart';
 import 'package:steps_counter/data/datasources/firebase_auth_datasource.dart';
+import 'package:steps_counter/data/repositories/firebase_achievements_repository.dart';
 import 'package:steps_counter/data/repositories/firebase_auth_repository.dart';
 import 'package:steps_counter/data/repositories/i_steps_counter_repository.dart';
+import 'package:steps_counter/domain/repositories/achievements_repository.dart';
 import 'package:steps_counter/domain/repositories/auth_repository.dart';
 import 'package:steps_counter/domain/repositories/steps_counter_repository.dart';
 
@@ -27,11 +30,24 @@ void setupLocator() {
     ),
   );
 
+  getIt.registerLazySingleton<FirebaseAchievementsDataSource>(
+    () => FirebaseAchievementsDataSource(
+      firebaseFirestore: getIt(),
+      logger: getIt(),
+    ),
+  );
+
   getIt.registerLazySingleton<AuthRepository>(
     () => FirebaseAuthRepository(authDatasource: getIt()),
   );
 
   getIt.registerLazySingleton<StepsCounterRepository>(
     () => IStepsCounterRepository(),
+  );
+
+  getIt.registerLazySingleton<AchievementsRepository>(
+    () => FirebaseAchievementsRepository(
+      firebaseAchievementsDataSource: getIt(),
+    ),
   );
 }

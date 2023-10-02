@@ -12,9 +12,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   })  : _authRepository = authRepository,
         super(const LoadingAuthState()) {
     on<InitializeAuthEvent>(_init);
-    on<SignInAuthEvent>(signIn);
-    on<RegisterAuthEvent>(register);
-    on<LogOutAuthEvent>(logOut);
+    on<SignInAuthEvent>(_signIn);
+    on<RegisterAuthEvent>(_register);
+    on<LogOutAuthEvent>(_logOut);
   }
 
   /// Checks if user is logged in and sets first state.
@@ -36,7 +36,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  Future<void> signIn(SignInAuthEvent event, Emitter<AuthState> emit) async {
+  Future<void> _signIn(SignInAuthEvent event, Emitter<AuthState> emit) async {
     try {
       emit(const LoadingAuthState());
 
@@ -57,7 +57,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  Future<void> register(
+  Future<void> _register(
       RegisterAuthEvent event, Emitter<AuthState> emit) async {
     try {
       emit(const LoadingAuthState());
@@ -73,7 +73,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  Future<void> logOut(LogOutAuthEvent event, Emitter<AuthState> emit) async {
+  Future<void> _logOut(LogOutAuthEvent event, Emitter<AuthState> emit) async {
     try {
       emit(const LoadingAuthState());
 

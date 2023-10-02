@@ -13,7 +13,7 @@ class StepsCounterBloc extends Bloc<StepsCounterEvent, StepsCounterState> {
   StepsCounterBloc({
     required StepsCounterRepository stepsCounterRepository,
   })  : _stepsCounterRepository = stepsCounterRepository,
-        super(InitialStepsCounterState()) {
+        super(const InitialStepsCounterState()) {
     on<InitializeStepsCounterEvent>(_init);
   }
 
@@ -33,7 +33,7 @@ class StepsCounterBloc extends Bloc<StepsCounterEvent, StepsCounterState> {
         },
         onError: (error, stackTrace) {
           emit(
-            ErrorStepsCounterState(
+            const ErrorStepsCounterState(
               todaySteps: 0,
               errorTitle: 'Error',
               errorText: 'Some error has occured',
@@ -45,7 +45,7 @@ class StepsCounterBloc extends Bloc<StepsCounterEvent, StepsCounterState> {
       );
     } catch (exception) {
       emit(
-        ErrorStepsCounterState(
+        const ErrorStepsCounterState(
           todaySteps: 0,
           errorTitle: 'Error',
           errorText: 'Some error has occured',

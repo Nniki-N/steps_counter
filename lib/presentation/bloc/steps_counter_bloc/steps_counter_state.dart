@@ -1,19 +1,19 @@
 abstract class StepsCounterState {
   final int todaySteps;
 
-  StepsCounterState({
+  const StepsCounterState({
     required this.todaySteps,
   });
 }
 
 class InitialStepsCounterState extends StepsCounterState {
-  InitialStepsCounterState({
+  const InitialStepsCounterState({
     int todaySteps = 0,
   }) : super(todaySteps: todaySteps);
 }
 
 class LoadedStepsCounterState extends StepsCounterState {
-  LoadedStepsCounterState({
+  const LoadedStepsCounterState({
     required int todaySteps,
   }) : super(todaySteps: todaySteps);
 }
@@ -22,7 +22,7 @@ class ErrorStepsCounterState extends StepsCounterState {
   final String errorTitle;
   final String errorText;
 
-  ErrorStepsCounterState({
+  const ErrorStepsCounterState({
     required int todaySteps,
     required this.errorTitle,
     required this.errorText,

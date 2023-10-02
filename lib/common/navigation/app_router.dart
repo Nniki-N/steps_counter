@@ -1,11 +1,12 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/material.dart';
+import 'package:steps_counter/domain/entities/achivement.dart';
+import 'package:steps_counter/presentation/screens/achievement_screen/achievement_screen.dart';
 import 'package:steps_counter/presentation/screens/auth_screens/registration_screen.dart';
 import 'package:steps_counter/presentation/screens/auth_screens/signin_screen.dart';
 import 'package:steps_counter/presentation/screens/initial_screen/initial_screen.dart';
 import 'package:steps_counter/presentation/screens/loading_screen/loading_screen.dart';
-import 'package:steps_counter/presentation/screens/main_screen/achivements_page/achivements_page.dart';
-import 'package:steps_counter/presentation/screens/main_screen/achivements_page/tabs/all_achivements_tab.dart';
-import 'package:steps_counter/presentation/screens/main_screen/achivements_page/tabs/user_achivements_tab.dart';
+import 'package:steps_counter/presentation/screens/main_screen/achievements_page/achievements_page.dart';
 import 'package:steps_counter/presentation/screens/main_screen/main_screen.dart';
 import 'package:steps_counter/presentation/screens/main_screen/steps_counter_page/steps_counter_page.dart';
 
@@ -46,19 +47,12 @@ class AppRouter extends _$AppRouter {
             AutoRoute(
               page: AchivementsRoute.page,
               path: 'achevements',
-              children: [
-                AutoRoute(
-                  page: UserAchivementsRoute.page,
-                  path: 'userAchivements',
-                  initial: true,
-                ),
-                AutoRoute(
-                  page: AllAchivementsRoute.page,
-                  path: 'allAchivements',
-                ),
-              ],
             ),
           ],
+        ),
+        AutoRoute(
+          page: AchievementRoute.page,
+          path: '/achievement',
         ),
       ];
 }
