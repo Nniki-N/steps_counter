@@ -14,6 +14,7 @@ const Map<String, AuthError> firebaseAuthErrorsMapping = {
   'account-exists-with-different-credential':
       AuthErrorAccountExistsWithDifferentCredential(),
   'invalid-credential': AuthErrorInvalidCredential(),
+  'invalid_login_credentials': AuthErrorInvalidLoginCredential(),
   'credential-already-in-use': AuthErrorCredentialAlreadyInUse(),
 };
 
@@ -32,9 +33,8 @@ abstract class AuthError {
 
   factory AuthError.fromFirebaseAuthExeption({
     required FirebaseAuthException exception,
-  }) =>
-      firebaseAuthErrorsMapping[exception.code.toLowerCase().trim()] ??
-      const AuthErrorUnknown();
+  }) => firebaseAuthErrorsMapping[exception.code.toLowerCase().trim()] ??
+        const AuthErrorUnknown();
 
   @override
   String toString() {
@@ -141,6 +141,15 @@ class AuthErrorInvalidCredential extends AuthError {
   const AuthErrorInvalidCredential()
       : super(
           errorTitle: 'Invalid credential',
+          errorText: 'The credential is malformed or has expired',
+        );
+}
+
+/// The [AuthError] child for a firebase error "auth/invalid-login-credential".
+class AuthErrorInvalidLoginCredential extends AuthError {
+  const AuthErrorInvalidLoginCredential()
+      : super(
+          errorTitle: 'Invalid sign in credential',
           errorText: 'The credential is malformed or has expired',
         );
 }

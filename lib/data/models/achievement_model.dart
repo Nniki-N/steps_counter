@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:steps_counter/data/models/achievement_schema.dart';
+import 'package:steps_counter/data/models/shemas/achievement_schema.dart';
 
 part 'achievement_model.g.dart';
 

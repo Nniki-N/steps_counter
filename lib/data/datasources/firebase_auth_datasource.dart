@@ -1,15 +1,20 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:logger/logger.dart';
 import 'package:steps_counter/common/errors/auth_error.dart';
+import 'package:steps_counter/data/datasources/helpers/firebase_account_datasource_helper.dart';
+import 'package:steps_counter/data/models/account_model.dart';
 
 class FirebaseAuthDataSource {
   final FirebaseAuth _firebaseAuth;
+  final FirebaseAccountDatasourceHelper _firebaseAccountDatasourceHelper;
   final Logger _logger;
 
   FirebaseAuthDataSource({
     required FirebaseAuth firebaseAuth,
+    required FirebaseAccountDatasourceHelper firebaseAccountDatasourceHelper,
     required Logger logger,
   })  : _firebaseAuth = firebaseAuth,
+        _firebaseAccountDatasourceHelper = firebaseAccountDatasourceHelper,
         _logger = logger;
 
   /// Logs the user in the app via Firebase Authentication with email and password.
@@ -54,6 +59,14 @@ class FirebaseAuthDataSource {
 
       // Throws an error if a registration process in the Firebase failed.
       if (user == null) throw const AuthErrorRegistration();
+
+      // Creates a user account.
+      final AccountModel accountModel = AccountModel(
+        uid: user.uid,
+        achievementUidList: ['1'],
+      );
+
+      await _firebaseAccountDatasourceHelper.createAccount(accountModel: accountModel);
     } catch (exception) {
       _logger.e(exception);
       rethrow;

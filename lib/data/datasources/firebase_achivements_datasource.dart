@@ -32,28 +32,4 @@ class FirebaseAchievementsDataSource {
       throw const AchievementErrorRetrievingAllAchievements();
     }
   }
-
-  // ///
-  // ///
-  // ///
-  // Future<AchievementModel> getAchievementById({
-  //   required String achievementId,
-  // }) async {
-  //   try {
-  //     final DocumentSnapshot<Map<String, dynamic>> snapshot =
-  //         await _firebaseFirestore
-  //             .collection(FirebaseConstants.achivements)
-  //             .doc(achievementId)
-  //             .get();
-
-  //     final Map<String, dynamic>? json = snapshot.data();
-
-  //     if (json != null) return AchievementModel.fromJson(json);
-
-  //     throw const AchievementErrorRetrievingAchievement();
-  //   } catch (exception) {
-  //     _logger.e(exception);
-  //     throw const AchievementErrorRetrievingAchievement();
-  //   }
-  // }
 }

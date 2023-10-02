@@ -5,7 +5,11 @@ import 'package:steps_counter/common/constants/shared_preferences_constants.dart
 import 'package:steps_counter/domain/repositories/steps_counter_repository.dart';
 
 class IStepsCounterRepository implements StepsCounterRepository {
-  IStepsCounterRepository();
+  final SharedPreferences _sharedPreferences;
+
+  IStepsCounterRepository({
+    required SharedPreferences sharedPreferences,
+  }) : _sharedPreferences = sharedPreferences;
 
   /// Returns a stream of the user's number of steps done for today.
   ///
@@ -42,6 +46,11 @@ class IStepsCounterRepository implements StepsCounterRepository {
           numberOfSteps: numberOfSteps,
         );
 
+        _sharedPreferences.setInt(
+          SharedPreferencesConstants.todayNumberOfStepskey,
+          todayNumberOfSteps,
+        );
+
         stepsStreamController.add(todayNumberOfSteps);
       });
 
@@ -56,16 +65,14 @@ class IStepsCounterRepository implements StepsCounterRepository {
     required int numberOfSteps,
   }) async {
     try {
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-
       final DateTime today = DateTime.now();
 
       int? savedNumberOfSteps;
-      savedNumberOfSteps = prefs.getInt(
+      savedNumberOfSteps = _sharedPreferences.getInt(
         SharedPreferencesConstants.lastNumberOfStepsKey,
       );
 
-      String? lastSavedNumberOfStepsDateString = prefs.getString(
+      String? lastSavedNumberOfStepsDateString = _sharedPreferences.getString(
         SharedPreferencesConstants.lastNumberOfStepsDateKey,
       );
       lastSavedNumberOfStepsDateString ??= today.toString();
@@ -78,11 +85,11 @@ class IStepsCounterRepository implements StepsCounterRepository {
       if (savedNumberOfSteps == null) {
         savedNumberOfSteps = numberOfSteps;
 
-        await prefs.setInt(
+        await _sharedPreferences.setInt(
           SharedPreferencesConstants.lastNumberOfStepsKey,
           savedNumberOfSteps,
         );
-        await prefs.setString(
+        await _sharedPreferences.setString(
           SharedPreferencesConstants.lastNumberOfStepsDateKey,
           today.toString(),
         );
@@ -96,11 +103,11 @@ class IStepsCounterRepository implements StepsCounterRepository {
       if (numberOfSteps < savedNumberOfSteps) {
         savedNumberOfSteps = 0;
 
-        await prefs.setInt(
+        await _sharedPreferences.setInt(
           SharedPreferencesConstants.lastNumberOfStepsKey,
           savedNumberOfSteps,
         );
-        await prefs.setString(
+        await _sharedPreferences.setString(
           SharedPreferencesConstants.lastNumberOfStepsDateKey,
           today.toString(),
         );
@@ -112,7 +119,7 @@ class IStepsCounterRepository implements StepsCounterRepository {
       if (today.day == lastSavedNumberOfStepsDate.day &&
           today.month == lastSavedNumberOfStepsDate.month &&
           today.year == lastSavedNumberOfStepsDate.year) {
-        await prefs.setString(
+        await _sharedPreferences.setString(
           SharedPreferencesConstants.lastNumberOfStepsDateKey,
           today.toString(),
         );
@@ -126,11 +133,11 @@ class IStepsCounterRepository implements StepsCounterRepository {
       else {
         savedNumberOfSteps = numberOfSteps - 1;
 
-        await prefs.setInt(
+        await _sharedPreferences.setInt(
           SharedPreferencesConstants.lastNumberOfStepsKey,
           savedNumberOfSteps,
         );
-        await prefs.setString(
+        await _sharedPreferences.setString(
           SharedPreferencesConstants.lastNumberOfStepsDateKey,
           today.toString(),
         );
