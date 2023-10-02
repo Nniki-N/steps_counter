@@ -4,7 +4,7 @@ import 'package:steps_counter/common/errors/auth_error.dart';
 import 'package:steps_counter/data/datasources/firebase_auth_datasource.dart';
 import 'package:steps_counter/domain/repositories/auth_repository.dart';
 
-class FirebaseAuthRepository extends AuthRepository {
+class FirebaseAuthRepository implements AuthRepository {
   final FirebaseAuthDataSource _authDatasource;
 
   FirebaseAuthRepository({

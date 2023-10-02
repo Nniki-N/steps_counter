@@ -13,7 +13,6 @@ part 'app_router.gr.dart';
 
 @AutoRouterConfig(
   replaceInRouteName: 'Page|Screen|Tab,Route',
-  deferredLoading: true,
 )
 class AppRouter extends _$AppRouter {
   @override
