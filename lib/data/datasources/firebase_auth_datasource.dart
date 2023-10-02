@@ -42,6 +42,8 @@ class FirebaseAuthDataSource {
   }
 
   /// Registers a user with email, password in the Firebase.
+  /// 
+  /// Creates an account document in the Firebase Firestore.
   ///
   /// Throws [AuthErrorRegistration] if a registration process failed.
   Future<void> registerWithEmailAndPassword({
@@ -60,12 +62,12 @@ class FirebaseAuthDataSource {
       // Throws an error if a registration process in the Firebase failed.
       if (user == null) throw const AuthErrorRegistration();
 
-      // Creates a user account.
       final AccountModel accountModel = AccountModel(
         uid: user.uid,
         achievementUidList: ['1'],
       );
 
+      // Creates a user account.
       await _firebaseAccountDatasourceHelper.createAccount(accountModel: accountModel);
     } catch (exception) {
       _logger.e(exception);

@@ -8,5 +8,8 @@ abstract class AchievementsRepository {
   /// Rethrows [AchievementErrorRetrievingAllAchievements] when any error occurs.
   Future<List<Achievement>> getAllAchievements();
 
+  /// Returns Stream of user achieved achievement ids.
+  ///
+  /// Rethrows any arror thar occurs.
   Stream<String> getAchievementsTrackStream({required Account account});
 }

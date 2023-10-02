@@ -17,7 +17,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<LogOutAuthEvent>(_logOut);
   }
 
-  /// Checks if user is logged in and sets first state.
+  /// Checks if the user is logged in and sets first state.
   ///
   /// Sets the error to the state if [AuthError] occurs.
   Future<void> _init(InitializeAuthEvent event, Emitter<AuthState> emit) async {
@@ -36,6 +36,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
+  /// Logs the user in the app.
   Future<void> _signIn(SignInAuthEvent event, Emitter<AuthState> emit) async {
     try {
       emit(const LoadingAuthState());
@@ -57,6 +58,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
+  // Registers a new account.
   Future<void> _register(
       RegisterAuthEvent event, Emitter<AuthState> emit) async {
     try {
@@ -73,6 +75,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
+  // Logs the user out of the app.
   Future<void> _logOut(LogOutAuthEvent event, Emitter<AuthState> emit) async {
     try {
       emit(const LoadingAuthState());

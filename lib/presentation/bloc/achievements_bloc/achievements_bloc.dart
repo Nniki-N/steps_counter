@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:steps_counter/common/errors/account_error.dart';
@@ -40,7 +39,7 @@ class AchievementsBloc extends Bloc<AchievementsEvent, AchievementsState> {
 
       final Account account = await _accountRepository.getCurrentAccount();
 
-      // Filters for achieved achieves.
+      // Filters for achieved achievements.
       allAchievements = allAchievements.map((achievement) {
         if (account.achievementUidList.contains(achievement.achivementId)) {
           return achievement.copyWith(isAchieved: true);
@@ -69,9 +68,7 @@ class AchievementsBloc extends Bloc<AchievementsEvent, AchievementsState> {
     }
   }
 
-  ///
-  ///
-  ///
+  /// Tracks if user got new achievement.
   Future<void> _trackForNewAchievements(
     TrackForNewAchievementsEvent event,
     Emitter<AchievementsState> emit,
@@ -79,6 +76,7 @@ class AchievementsBloc extends Bloc<AchievementsEvent, AchievementsState> {
     try {
       Account currentAccount = await _accountRepository.getCurrentAccount();
 
+      // Stream of the current user achieved achievement ids.
       final Stream<String> achievementsStream =
           _achievementsRepository.getAchievementsTrackStream(
         account: currentAccount,
@@ -87,7 +85,7 @@ class AchievementsBloc extends Bloc<AchievementsEvent, AchievementsState> {
       await _listenStream(
         achievementsStream,
         onData: (achievementId) async {
-          log('achievementId ^ $achievementId');
+          // Retrieves the account again as it may be updated.
           Account currentAccount = await _accountRepository.getCurrentAccount();
           List<String> achievementUidList = currentAccount.achievementUidList;
 
@@ -97,6 +95,7 @@ class AchievementsBloc extends Bloc<AchievementsEvent, AchievementsState> {
             achievementUidList: achievementUidList,
           );
 
+          // Saves an achievements change in the database.
           _accountRepository.updateUserAccount(account: currentAccount);
 
           // Filters for achieved achieves.

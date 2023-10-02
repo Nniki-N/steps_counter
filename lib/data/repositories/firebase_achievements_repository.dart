@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
-
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:steps_counter/common/constants/shared_preferences_constants.dart';
 import 'package:steps_counter/data/datasources/firebase_achivements_datasource.dart';
@@ -37,20 +35,22 @@ class FirebaseAchievementsRepository implements AchievementsRepository {
     }
   }
 
+  /// Returns Stream of user achieved achievement ids.
   ///
-  ///
-  ///
+  /// Rethrows any arror thar occurs.
   @override
   Stream<String> getAchievementsTrackStream({required Account account}) {
     try {
+      // Stream of user achieved achievement ids.
       final StreamController<String> achievementsStreamController =
           StreamController<String>();
       final Stream<String> achievementsStream =
           achievementsStreamController.stream.asBroadcastStream();
 
+      // Checks for new achievement every tick
       Timer.periodic(
         const Duration(milliseconds: 500),
-        (_) {
+        (timer) {
           _checkNumberOfStepsAchievements(
             achievementsStreamController: achievementsStreamController,
             account: account,
@@ -64,6 +64,11 @@ class FirebaseAchievementsRepository implements AchievementsRepository {
     }
   }
 
+  /// Checks if user achieved any achievement.
+  ///
+  /// Currently only two achievements are available:
+  /// 1. User reached 30 steps in one day.
+  /// 2. User reached 100 steps  in one day.
   void _checkNumberOfStepsAchievements({
     required StreamController<String> achievementsStreamController,
     required Account account,
@@ -72,17 +77,13 @@ class FirebaseAchievementsRepository implements AchievementsRepository {
       SharedPreferencesConstants.todayNumberOfStepskey,
     );
 
-    log('todayNumberOfStepskey^ $todayNumberOfStepskey');
-
     todayNumberOfStepskey ??= 0;
 
     if (todayNumberOfStepskey >= 30 && !account.achievementUidList.contains('2')) {
-      log('Second Achievement');
       achievementsStreamController.add('2');
     }
 
     if (todayNumberOfStepskey >= 100 && !account.achievementUidList.contains('3')) {
-      log('Third Achievement');
       achievementsStreamController.add('3');
     }
   }

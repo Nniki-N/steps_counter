@@ -29,9 +29,11 @@ class IStepsCounterRepository implements StepsCounterRepository {
       //   stepsStreamController.add(todaySteps);
       // });
 
+      // Stream of the user's number of steps done for today.
       StreamController<int> stepsStreamController = StreamController<int>();
       Stream<int> stepsStream = stepsStreamController.stream;
 
+      // Replacement for pedometer.
       Stream<int> stepsStreamPeriodic = Stream.periodic(
         const Duration(milliseconds: 300),
         (count) {
@@ -41,11 +43,13 @@ class IStepsCounterRepository implements StepsCounterRepository {
         },
       ).take(100);
 
+      // Counts steps.
       stepsStreamPeriodic.listen((numberOfSteps) async {
         final int todayNumberOfSteps = await _countTodaySteps(
           numberOfSteps: numberOfSteps,
         );
 
+        // Saves number of steps done in one day to be used in achieves.
         _sharedPreferences.setInt(
           SharedPreferencesConstants.todayNumberOfStepskey,
           todayNumberOfSteps,
@@ -72,6 +76,7 @@ class IStepsCounterRepository implements StepsCounterRepository {
         SharedPreferencesConstants.lastNumberOfStepsKey,
       );
 
+      // Is used to update number of steps for a new day.
       String? lastSavedNumberOfStepsDateString = _sharedPreferences.getString(
         SharedPreferencesConstants.lastNumberOfStepsDateKey,
       );
@@ -79,9 +84,7 @@ class IStepsCounterRepository implements StepsCounterRepository {
       DateTime lastSavedNumberOfStepsDate =
           DateTime.parse(lastSavedNumberOfStepsDateString);
 
-      // log('---- 1');
-
-      // First load
+      // Saves data in the first load.
       if (savedNumberOfSteps == null) {
         savedNumberOfSteps = numberOfSteps;
 
@@ -94,12 +97,10 @@ class IStepsCounterRepository implements StepsCounterRepository {
           today.toString(),
         );
 
-        // log('---- 2');
-
         return numberOfSteps - savedNumberOfSteps;
       }
 
-      // Pedometer was reseted
+      // Pedometer was reseted.
       if (numberOfSteps < savedNumberOfSteps) {
         savedNumberOfSteps = 0;
 
@@ -111,11 +112,9 @@ class IStepsCounterRepository implements StepsCounterRepository {
           SharedPreferencesConstants.lastNumberOfStepsDateKey,
           today.toString(),
         );
-
-        // log('---- 3');
       }
 
-      // The same day
+      // Counts for the same day.
       if (today.day == lastSavedNumberOfStepsDate.day &&
           today.month == lastSavedNumberOfStepsDate.month &&
           today.year == lastSavedNumberOfStepsDate.year) {
@@ -124,12 +123,10 @@ class IStepsCounterRepository implements StepsCounterRepository {
           today.toString(),
         );
 
-        // log('---- 4');
-
         return numberOfSteps - savedNumberOfSteps;
       }
 
-      // Another day
+      // Resets number of steps for nother day.
       else {
         savedNumberOfSteps = numberOfSteps - 1;
 
@@ -141,8 +138,6 @@ class IStepsCounterRepository implements StepsCounterRepository {
           SharedPreferencesConstants.lastNumberOfStepsDateKey,
           today.toString(),
         );
-
-        // log('---- 5');
 
         return numberOfSteps - savedNumberOfSteps;
       }
