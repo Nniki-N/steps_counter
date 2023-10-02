@@ -17,21 +17,28 @@ class IStepsCounterRepository implements StepsCounterRepository {
   @override
   Stream<int> todayStepsStream() {
     try {
-      // Stream<StepCount> stepCountStream =
-      // Pedometer.stepCountStream.asBroadcastStream();
-
-      // stepCountStream.listen((stepCount) async {
-      //   // stepsStreamController.add(stepCount.steps);
-      //   final int todaySteps = await countTodaySteps(
-      //     stepsCount: stepCount.steps,
-      //   );
-
-      //   stepsStreamController.add(todaySteps);
-      // });
-
       // Stream of the user's number of steps done for today.
       StreamController<int> stepsStreamController = StreamController<int>();
       Stream<int> stepsStream = stepsStreamController.stream;
+
+      // Stream<StepCount> stepCountStream =
+      //     Pedometer.stepCountStream.asBroadcastStream();
+
+      // stepCountStream.listen((numberOfSteps) async {
+      //   final int todayNumberOfSteps = await _countTodaySteps(
+      //     numberOfSteps: numberOfSteps.steps,
+      //   );
+
+      //   // Saves number of steps done in one day to be used in achieves.
+      //   _sharedPreferences.setInt(
+      //     SharedPreferencesConstants.todayNumberOfStepskey,
+      //     todayNumberOfSteps,
+      //   );
+
+      //   stepsStreamController.add(todayNumberOfSteps);
+      // });
+
+      // =======================================================================
 
       // Replacement for pedometer.
       Stream<int> stepsStreamPeriodic = Stream.periodic(
@@ -57,6 +64,8 @@ class IStepsCounterRepository implements StepsCounterRepository {
 
         stepsStreamController.add(todayNumberOfSteps);
       });
+
+      // =======================================================================
 
       return stepsStream;
     } catch (exception) {
