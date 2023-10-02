@@ -1,6 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:steps_counter/common/navigation/app_router.dart';
+import 'package:steps_counter/presentation/bloc/auth_bloc/auth_bloc.dart';
+import 'package:steps_counter/presentation/bloc/auth_bloc/auth_state.dart';
 import 'package:steps_counter/presentation/screens/main_screen/custom_navigation_bottom_bar.dart';
 
 @RoutePage()
@@ -9,7 +12,14 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AutoTabsRouter(
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, authState) {
+        // Navigates to the sign in screen if the user is logged iout.
+        if (authState is LoggedOutAuthState) {
+          AutoRouter.of(context).replace(const SignInRoute());
+        }
+      },
+      child: AutoTabsRouter(
         routes: const [
           StepsCounterRoute(),
           AchivementsRoute(),
@@ -29,6 +39,7 @@ class MainScreen extends StatelessWidget {
             bottomNavigationBar: const CustomBottomNavigationBar(),
           );
         },
-      );
+      ),
+    );
   }
 }

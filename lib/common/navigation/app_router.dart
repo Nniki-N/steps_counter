@@ -11,7 +11,10 @@ import 'package:steps_counter/presentation/screens/main_screen/steps_counter_pag
 
 part 'app_router.gr.dart';
 
-@AutoRouterConfig(replaceInRouteName: 'Page|Screen|Tab,Route')
+@AutoRouterConfig(
+  replaceInRouteName: 'Page|Screen|Tab,Route',
+  deferredLoading: true,
+)
 class AppRouter extends _$AppRouter {
   @override
   List<AutoRoute> get routes => [

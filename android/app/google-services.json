@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "592178774855",
+    "project_id": "step-counter-5b281",
+    "storage_bucket": "step-counter-5b281.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:592178774855:android:82637df2052b9587240262",
+        "android_client_info": {
+          "package_name": "com.example.steps_counter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHyXvWlkyiHU7JoyOFEvtlOkdCOS4WKcQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

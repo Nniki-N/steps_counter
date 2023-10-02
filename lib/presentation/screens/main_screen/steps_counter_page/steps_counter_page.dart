@@ -1,6 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:steps_counter/common/navigation/app_router.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:steps_counter/presentation/bloc/auth_bloc/auth_bloc.dart';
+import 'package:steps_counter/presentation/bloc/auth_bloc/auth_event.dart';
 
 @RoutePage()
 class StepsCounterPage extends StatelessWidget {
@@ -24,8 +26,7 @@ class StepsCounterPage extends StatelessWidget {
             const SizedBox(height: 100),
             ElevatedButton(
               onPressed: () {
-                //
-                context.router.replace(const SignInRoute());
+                context.read<AuthBloc>().add(const LogOutAuthEvent());
               },
               child: const Text('Log out'),
             ),
