@@ -61,7 +61,11 @@ void setupLocator() {
   );
 
   getIt.registerLazySingleton<AuthRepository>(
-    () => FirebaseAuthRepository(authDatasource: getIt()),
+    () => FirebaseAuthRepository(
+      firebaseAccountsDataSource: getIt(),
+      firebaseAuthDataSource: getIt(),
+      sharedPreferences: getIt(),
+    ),
   );
 
   getIt.registerLazySingleton<StepsCounterRepository>(

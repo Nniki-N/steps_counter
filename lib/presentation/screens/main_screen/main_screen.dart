@@ -7,6 +7,8 @@ import 'package:steps_counter/presentation/bloc/achievements_bloc/achievements_b
 import 'package:steps_counter/presentation/bloc/achievements_bloc/achievements_event.dart';
 import 'package:steps_counter/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:steps_counter/presentation/bloc/auth_bloc/auth_state.dart';
+import 'package:steps_counter/presentation/bloc/steps_counter_bloc/steps_counter_bloc.dart';
+import 'package:steps_counter/presentation/bloc/steps_counter_bloc/steps_counter_event.dart';
 import 'package:steps_counter/presentation/screens/main_screen/custom_navigation_bottom_bar.dart';
 
 @RoutePage()
@@ -15,13 +17,22 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => AchievementsBloc(
-        achievementsRepository: getIt(),
-        accountRepository: getIt(),
-      )
-        ..add(const InitializeAchievementsEvent())
-        ..add(const TrackForNewAchievementsEvent()),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => AchievementsBloc(
+            achievementsRepository: getIt(),
+            accountRepository: getIt(),
+          )
+            ..add(const InitializeAchievementsEvent())
+            ..add(const TrackForNewAchievementsEvent()),
+        ),
+        BlocProvider(
+          create: (context) => StepsCounterBloc(
+            stepsCounterRepository: getIt(),
+          )..add(InitializeStepsCounterEvent()),
+        ),
+      ],
       child: BlocListener<AuthBloc, AuthState>(
         listener: (context, authState) {
           // Navigates to the sign in screen if the user is logged iout.

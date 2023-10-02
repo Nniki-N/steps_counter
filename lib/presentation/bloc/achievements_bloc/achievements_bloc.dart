@@ -74,13 +74,9 @@ class AchievementsBloc extends Bloc<AchievementsEvent, AchievementsState> {
     Emitter<AchievementsState> emit,
   ) async {
     try {
-      Account currentAccount = await _accountRepository.getCurrentAccount();
-
       // Stream of the current user achieved achievement ids.
       final Stream<String> achievementsStream =
-          _achievementsRepository.getAchievementsTrackStream(
-        account: currentAccount,
-      );
+          _achievementsRepository.getAchievementsTrackStream();
 
       await _listenStream(
         achievementsStream,
@@ -96,7 +92,7 @@ class AchievementsBloc extends Bloc<AchievementsEvent, AchievementsState> {
           );
 
           // Saves an achievements change in the database.
-          _accountRepository.updateUserAccount(account: currentAccount);
+          await _accountRepository.updateUserAccount(account: currentAccount);
 
           // Filters for achieved achieves.
           List<Achievement> allAchievements =

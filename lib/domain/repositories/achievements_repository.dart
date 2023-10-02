@@ -1,4 +1,3 @@
-import 'package:steps_counter/domain/entities/account.dart';
 import 'package:steps_counter/domain/entities/achivement.dart';
 import 'package:steps_counter/common/errors/achievement_error.dart';
 
@@ -11,5 +10,5 @@ abstract class AchievementsRepository {
   /// Returns Stream of user achieved achievement ids.
   ///
   /// Rethrows any arror thar occurs.
-  Stream<String> getAchievementsTrackStream({required Account account});
+  Stream<String> getAchievementsTrackStream();
 }

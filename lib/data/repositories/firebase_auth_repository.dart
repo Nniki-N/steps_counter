@@ -1,15 +1,25 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:steps_counter/common/constants/shared_preferences_constants.dart';
 import 'package:steps_counter/common/errors/auth_error.dart';
+import 'package:steps_counter/data/datasources/firebase_accounts_datasource.dart';
 import 'package:steps_counter/data/datasources/firebase_auth_datasource.dart';
+import 'package:steps_counter/data/models/account_model.dart';
 import 'package:steps_counter/domain/repositories/auth_repository.dart';
 
 class FirebaseAuthRepository implements AuthRepository {
-  final FirebaseAuthDataSource _authDatasource;
+  final FirebaseAuthDataSource _firebaseAuthDataSource;
+  final FirebaseAccountsDataSource _firebaseAccountsDataSource;
+  final SharedPreferences _sharedPreferences;
 
   FirebaseAuthRepository({
-    required FirebaseAuthDataSource authDatasource,
-  }) : _authDatasource = authDatasource;
+    required FirebaseAuthDataSource firebaseAuthDataSource,
+    required FirebaseAccountsDataSource firebaseAccountsDataSource,
+    required SharedPreferences sharedPreferences,
+  })  : _firebaseAuthDataSource = firebaseAuthDataSource,
+        _firebaseAccountsDataSource = firebaseAccountsDataSource,
+        _sharedPreferences = sharedPreferences;
 
   /// Logs the user in the app with email and password.
   ///
@@ -20,9 +30,16 @@ class FirebaseAuthRepository implements AuthRepository {
     required String password,
   }) async {
     try {
-      await _authDatasource.signInWithEmailAndPassword(
+      await _firebaseAuthDataSource.signInWithEmailAndPassword(
         email: email,
         password: password,
+      );
+
+      final AccountModel accountModel = await _firebaseAccountsDataSource.getCurrentAccountModel();
+
+      await _sharedPreferences.setStringList(
+        SharedPreferencesConstants.userAchievementsListKey(uid: accountModel.uid),
+        accountModel.achievementUidList,
       );
     } on FirebaseAuthException catch (firebaseAuthException) {
       throw AuthError.fromFirebaseAuthExeption(
@@ -42,9 +59,16 @@ class FirebaseAuthRepository implements AuthRepository {
     required String password,
   }) async {
     try {
-      await _authDatasource.registerWithEmailAndPassword(
+      await _firebaseAuthDataSource.registerWithEmailAndPassword(
         email: email,
         password: password,
+      );
+
+      final AccountModel accountModel = await _firebaseAccountsDataSource.getCurrentAccountModel();
+
+      await _sharedPreferences.setStringList(
+        SharedPreferencesConstants.userAchievementsListKey(uid: accountModel.uid),
+        ['1'],
       );
     } on FirebaseAuthException catch (firebaseAuthException) {
       throw AuthError.fromFirebaseAuthExeption(
@@ -62,7 +86,7 @@ class FirebaseAuthRepository implements AuthRepository {
   @override
   Future<void> logOut() async {
     try {
-      await _authDatasource.logOut();
+      await _firebaseAuthDataSource.logOut();
     } on FirebaseAuthException catch (firebaseAuthException) {
       throw AuthError.fromFirebaseAuthExeption(
         exception: firebaseAuthException,
@@ -74,5 +98,5 @@ class FirebaseAuthRepository implements AuthRepository {
 
   /// Checks if the user is logged in.
   @override
-  Future<bool> isLoggedIn() async => _authDatasource.isLoggedIn();
+  Future<bool> isLoggedIn() async => _firebaseAuthDataSource.isLoggedIn();
 }
