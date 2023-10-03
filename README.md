@@ -1,7 +1,7 @@
 This app was developed and tested for Android devices.
 
 Unfortunately my real device doesn't support activity recognition, so to test the app, I added Stream.periodic as a replacement for pedometer, so mainly app was tested in this case.
-To use pedometer for a test, you just to go to the "i_steps_counter_repository.dart" file uncomment this code in method todayStepsStream:
+To use pedometer for a test, you just go to the "i_steps_counter_repository.dart" file and uncomment this code in method todayStepsStream:
 
       Stream<StepCount> stepCountStream =
           Pedometer.stepCountStream.asBroadcastStream();
