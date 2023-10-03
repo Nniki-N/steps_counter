@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:pedometer/pedometer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -28,24 +29,27 @@ class IStepsCounterRepository implements StepsCounterRepository {
       // Stream<StepCount> stepCountStream =
       //     Pedometer.stepCountStream.asBroadcastStream();
 
-      // stepCountStream.listen((numberOfSteps) async {
-      //   final User? user = FirebaseAuth.instance.currentUser;
-      //   if (user != null) {
-      //     final int todayNumberOfSteps = await _countTodaySteps(
-      //       numberOfSteps: numberOfSteps.steps,
-      //     );
+      // stepCountStream.listen(
+      //   (numberOfSteps) async {
+      //     final User? user = FirebaseAuth.instance.currentUser;
+      //     if (user != null) {
+      //       final int todayNumberOfSteps = await _countTodaySteps(
+      //         numberOfSteps: numberOfSteps.steps,
+      //       );
 
-      //     // Saves number of steps done in one day to be used in achieves.
-      //     _sharedPreferences.setInt(
-      //       SharedPreferencesConstants.todayNumberOfStepskey,
-      //       todayNumberOfSteps,
-      //     );
+      //       // Saves number of steps done in one day to be used in achieves.
+      //       _sharedPreferences.setInt(
+      //         SharedPreferencesConstants.todayNumberOfStepskey,
+      //         todayNumberOfSteps,
+      //       );
 
-      //     stepsStreamController.add(todayNumberOfSteps);
-      //   } else {
-      //     _stepCountStreamSubscription.cancel();
-      //   }
-      // });
+      //       stepsStreamController.add(todayNumberOfSteps);
+      //     } else {
+      //       _stepCountStreamSubscription.cancel();
+      //     }
+      //   },
+      //   onError: (exception) => log(exception.toString()),
+      // );
 
       // =======================================================================
 
@@ -60,30 +64,33 @@ class IStepsCounterRepository implements StepsCounterRepository {
       ).take(100);
 
       // Counts steps.
-      _stepsStreamPeriodicSubscription =
-          stepsStreamPeriodic.listen((numberOfSteps) async {
-        final User? user = FirebaseAuth.instance.currentUser;
-        if (user != null) {
-          final int todayNumberOfSteps = await _countTodaySteps(
-            numberOfSteps: numberOfSteps,
-          );
+      _stepsStreamPeriodicSubscription = stepsStreamPeriodic.listen(
+        (numberOfSteps) async {
+          final User? user = FirebaseAuth.instance.currentUser;
+          if (user != null) {
+            final int todayNumberOfSteps = await _countTodaySteps(
+              numberOfSteps: numberOfSteps,
+            );
 
-          // Saves number of steps done in one day to be used in achieves.
-          _sharedPreferences.setInt(
-            SharedPreferencesConstants.todayNumberOfStepskey,
-            todayNumberOfSteps,
-          );
+            // Saves number of steps done in one day to be used in achieves.
+            _sharedPreferences.setInt(
+              SharedPreferencesConstants.todayNumberOfStepskey,
+              todayNumberOfSteps,
+            );
 
-          stepsStreamController.add(todayNumberOfSteps);
-        } else {
-          _stepsStreamPeriodicSubscription.cancel();
-        }
-      });
+            stepsStreamController.add(todayNumberOfSteps);
+          } else {
+            _stepsStreamPeriodicSubscription.cancel();
+          }
+        },
+        onError: (exception) => log(exception.toString()),
+      );
 
       // =======================================================================
 
       return stepsStream;
     } catch (exception) {
+      log(exception.toString());
       rethrow;
     }
   }
